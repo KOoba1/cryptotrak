@@ -10,6 +10,27 @@ CREATE TABLE ScrapedData (
 
 ); 
 
+CREATE TABLE CoinPrice (
+	  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  CoinName VARCHAR(200),
+  CoinId INT, 
+  BitcoinPrice DECIMAL(10,9) ,
+  EntryDate  DATETIME DEFAULT CURRENT_TIMESTAMP, 
+   PRIMARY KEY (id)
+
+);
+
+
+CREATE TABLE BitcoinPrice (
+	  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+  Currency VARCHAR(200), 
+  Value DECIMAL(12,2) , 
+  Symbol VARCHAR(20), 
+  EntryDate  DATETIME DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (id)
+
+);
+
 /*
 "BTC_XEM": {
 		"id": 112,
