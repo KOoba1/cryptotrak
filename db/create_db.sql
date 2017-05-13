@@ -13,8 +13,8 @@ CREATE TABLE ScrapedData (
 CREATE TABLE CoinPrice (
 	  id MEDIUMINT NOT NULL AUTO_INCREMENT,
   CoinName VARCHAR(200),
-  CoinId INT, 
-  BitcoinPrice DECIMAL(10,9) ,
+  CoinId VARCHAR(200), 
+  BitcoinPrice DECIMAL(16,16) ,
   EntryDate  DATETIME DEFAULT CURRENT_TIMESTAMP, 
    PRIMARY KEY (id)
 
