@@ -1,5 +1,6 @@
 CREATE DATABASE CryptoTrak ;
 
+/*
 CREATE TABLE ScrapedData ( 
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
   CoinName VARCHAR(200),
@@ -8,7 +9,7 @@ CREATE TABLE ScrapedData (
   HighestBid DECIMAL(10,9), 
    PRIMARY KEY (id)
 
-); 
+); */  
 
 CREATE TABLE CoinPrice (
 	  id MEDIUMINT NOT NULL AUTO_INCREMENT,
