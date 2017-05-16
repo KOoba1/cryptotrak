@@ -17,6 +17,17 @@ export default {
     return {
       msg: 'CryopTrak'
     }
+  } ,
+  mounted : function () {
+ this.$http.get('http://koobasoft.com/cryptoscrape/LatestBitcoinPrice.php').then(response => {
+
+    console.log( response.body ) ;
+    
+ } , response => {
+    console.log('some error'); 
+  } ); 
+    //http://koobasoft.com/cryptoscrape/LatestBitcoinPrice.php
+    //http://koobasoft.com/cryptoscrape/LatestCoinData.php
   }
 }
 </script>
