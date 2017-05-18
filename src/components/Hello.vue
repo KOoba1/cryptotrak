@@ -45,7 +45,7 @@ export default {
   methods : {
     updateBitcoinPrice : function () { 
 
-        this.$http.get('http://koobasoft.com/cryptoscrape/LatestBitcoinPrice.php').then(response => {
+        this.$http.get('https://koobasoft.com/cryptoscrape/LatestBitcoinPrice.php').then(response => {
           this.bitCoinPrice = response.body[0].Value; 
         
         }, response => {
@@ -57,7 +57,7 @@ export default {
     updateAllCoins : function() {
 
 
-    this.$http.get('http://koobasoft.com/cryptoscrape/LatestCoinData.php').then(response => {
+    this.$http.get('https://koobasoft.com/cryptoscrape/LatestCoinData.php').then(response => {
      this.allCoins = response.body ; 
       console.log(response.body); 
     // console.log("first repsonse is: " + response.body[0] );

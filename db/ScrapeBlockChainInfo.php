@@ -1,5 +1,6 @@
 <?php
-require('../../sql/connect_crypto.php');
+//require('../../sql/connect_crypto.php');
+require('/var/www/sql/connect_crypto.php');
 //https://blockchain.info/ticker
 
 // Get cURL resource

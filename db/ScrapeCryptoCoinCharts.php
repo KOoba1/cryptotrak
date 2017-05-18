@@ -1,5 +1,6 @@
 <?php
-require('../../sql/connect_crypto.php');
+//require('../../sql/connect_crypto.php');
+require('/var/www/sql/connect_crypto.php');
 //https://poloniex.com/public?command=returnTicker
 
 // Get cURL resource
