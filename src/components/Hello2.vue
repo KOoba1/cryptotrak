@@ -53,6 +53,7 @@ export default {
       var value =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinName; }) )[0].BitcoinPrice  * this.qty  * this.bitCoinPrice;
       var newCoin = { 'coinName':this.newCoinName ,  'qty': this.qty , 'value':value} ; 
       this.myCoins.push(newCoin); 
+      window.localStorage.setItem('test', "Test" )
 
     } , 
     updateBitcoinPrice : function () { 
