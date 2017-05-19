@@ -3,13 +3,20 @@
     <h1>Welcome to CryptoTrak</h1>
       <h2>Bitcoin price is: {{ this.bitCoinPrice }}</h2>
        <h3>Your portfolio Value is: {{ this.totalValue }}</h3>
+       <h5>Last Updated: {{ this.lastUpdated }}</h5>
      <select id="sitePicker" data-live-search="true" class="selectpicker form-control"  data-icon-base="fa"  data-actions-box="true"  >
-      <option v-for="coin in allCoins" :value="coin.BitcoinPrice" :key="coin.CoinId" >{{coin.CoinId}}</option>
+      <option v-for="coin in allCoins" :value="coin.CoinId" :key="coin.CoinId" >{{coin.CoinId}}</option>
     </select>
-    <input v-model="qty" type="number"></input>
-    <input v-model="origValue" type="number"></input>
-    <p>Cur value: {{ currentValue }} </p>
-   
+    <label>Qty: <input v-model="qty" type="number"></input> </label>
+    <br>
+    <label>Purchased Price: <input v-model="origValue" type="number"></input></label>
+    <button @click="addCoin">Add Coin</button>
+    <h2>My Coins</h2>
+    <div v-for="myCoin in myCoins">
+      <label>Coin Name: {{ myCoin.coinName }} </label>
+      <label>Qty: {{ myCoin.qty }} </label>
+      <label>Value: {{ myCoin.value}} </label>
+    </div>   
   </div>
 </template>
 
@@ -19,7 +26,9 @@ export default {
   data () {
     return {
      allCoins:[], 
-     newCoin:'',
+     lastUpdated:'',
+     myCoins:[], 
+     newCoinName:'',  
      qty:1,
      origValue:0,
      bitCoinPrice:0,
@@ -33,16 +42,19 @@ export default {
 
     totalValue : function () {
 
-      return 5; 
-    } , 
-    currentValue : function() {
-
-     // return qty * this.myCoinValue * bitCoinPrice  ; 
-        return this.qty * this.coinValue * this.bitCoinPrice  ; 
-    }
+      return this.myCoins.reduce( function ( a , b , index) { return a + b.value  } , 0 ); 
+    } 
 
   },
   methods : {
+    addCoin : function() {
+      this.newCoinName =  $('.selectpicker').val(); 
+      var self = this; 
+      var value =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinName; }) )[0].BitcoinPrice  * this.qty  * this.bitCoinPrice;
+      var newCoin = { 'coinName':this.newCoinName ,  'qty': this.qty , 'value':value} ; 
+      this.myCoins.push(newCoin); 
+
+    } , 
     updateBitcoinPrice : function () { 
 
         this.$http.get('https://koobasoft.com/cryptoscrape/LatestBitcoinPrice.php').then(response => {
@@ -58,6 +70,7 @@ export default {
 
 
     this.$http.get('https://koobasoft.com/cryptoscrape/LatestCoinData.php').then(response => {
+      this.lastUpdated = response.body[0].EntryDate; 
      this.allCoins = response.body ; 
       console.log(response.body); 
     // console.log("first repsonse is: " + response.body[0] );
@@ -81,13 +94,14 @@ export default {
       this.updateAllCoins(); 
       this.updateAllInterval = setInterval(this.updateAllCoins, 60000);
 
+      /*
       var self = this; 
        $('.selectpicker').on('change', function () {
         var value = $('.selectpicker').val(); 
         self.coinValue = value; 
         //alert( value ) ; 
        });   
-
+      */ 
     //http://koobasoft.com/cryptoscrape/LatestBitcoinPrice.php
     //http://koobasoft.com/cryptoscrape/LatestCoinData.php
   } , 
