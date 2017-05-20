@@ -5,7 +5,7 @@
        <h3>Your portfolio Value is: {{ this.totalValue }}</h3>
        <h5>Last Updated: {{ this.lastUpdated }}</h5>
      <select id="sitePicker" data-live-search="true" class="selectpicker form-control"  data-icon-base="fa"  data-actions-box="true"  >
-      <option v-for="coin in allCoins" :value="coin.CoinId" :key="coin.CoinId" >{{coin.CoinId}}</option>
+      <option v-for="coin in allCoins" :value="coin.CoinId" :key="coin.CoinId" >{{coin.CoinName}}</option>
     </select>
     <label>Qty: <input v-model="qty" type="number"></input> </label>
     <br>
@@ -16,6 +16,8 @@
       <label>Coin Name: {{ myCoin.coinName }} </label>
       <label>Qty: {{ myCoin.qty }} </label>
       <label>Value: {{ myCoin.value}} </label>
+          <label>CoinId: {{ myCoin.coinId}} </label>
+
       <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span>
     </div>   
   </div>
@@ -29,7 +31,7 @@ export default {
      allCoins:[], 
      lastUpdated:'',
      myCoins:[], 
-     newCoinName:'',  
+     newCoinId:'',  
      qty:1,
      origValue:0,
      bitCoinPrice:0,
@@ -49,10 +51,11 @@ export default {
   },
   methods : {
     addCoin : function() {
-      this.newCoinName =  $('.selectpicker').val(); 
+      this.newCoinId =  $('.selectpicker').val(); 
       var self = this; 
-      var value =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinName; }) )[0].BitcoinPrice  * this.qty  * this.bitCoinPrice;
-      var newCoin = { 'coinName':this.newCoinName ,  'qty': this.qty , 'value':value} ; 
+      var value =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinId; }) )[0].BitcoinPrice  * this.qty  * this.bitCoinPrice;
+      var coinName  =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinId; }) )[0].CoinName
+      var newCoin = { 'coinName':coinName , 'coinId':this.newCoinId , 'qty': this.qty , 'value':value} ; 
       this.myCoins.push(newCoin); 
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
 
