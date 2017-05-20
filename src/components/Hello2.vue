@@ -12,10 +12,11 @@
     <label>Purchased Price: <input v-model="origValue" type="number"></input></label>
     <button @click="addCoin">Add Coin</button>
     <h2>My Coins</h2>
-    <div v-for="myCoin in myCoins">
+    <div v-for="(myCoin, index) in myCoins">
       <label>Coin Name: {{ myCoin.coinName }} </label>
       <label>Qty: {{ myCoin.qty }} </label>
       <label>Value: {{ myCoin.value}} </label>
+      <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span>
     </div>   
   </div>
 </template>
@@ -53,7 +54,7 @@ export default {
       var value =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinName; }) )[0].BitcoinPrice  * this.qty  * this.bitCoinPrice;
       var newCoin = { 'coinName':this.newCoinName ,  'qty': this.qty , 'value':value} ; 
       this.myCoins.push(newCoin); 
-      window.localStorage.setItem('test', "Test" )
+      window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
 
     } , 
     updateBitcoinPrice : function () { 
@@ -67,6 +68,11 @@ export default {
       ); 
 
     } ,
+    removeCoin : function(index) {
+      
+      this.myCoins.splice( index, 1 ); 
+      window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
+    },
     updateAllCoins : function() {
 
 
@@ -86,10 +92,19 @@ export default {
     console.log('some error'); 
   } ); 
 
+    } ,
+    getMyCoins : function() {
+
+      var coinData =  window.localStorage.getItem('myCoins') ;
+      if (coinData != null || '' ) {
+        this.myCoins = JSON.parse(coinData); 
+      }
+
     }
 
   },
   mounted : function () {
+      this.getMyCoins(); 
       this.updateBitcoinPrice(); 
       this.updateBitcoinInterval = setInterval(this.updateBitcoinPrice,60000);
       this.updateAllCoins(); 
