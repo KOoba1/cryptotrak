@@ -5,7 +5,9 @@ import App from './App'
 import router from './router'
 
 import VueResource from 'vue-resource';
-
+import Vue2Filters from 'vue2-filters'
+ 
+Vue.use(Vue2Filters) ;
 Vue.use(VueResource);
 Vue.config.productionTip = false
 

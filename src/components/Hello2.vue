@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>Welcome to CryptoTrak</h1>
       <h2>Bitcoin price is: {{ this.bitCoinPrice }}</h2>
-       <h3>Your portfolio Value is: {{ this.totalValue }}</h3>
+       <h3>Your portfolio Value is: {{ this.totalValue | currency  }}</h3>
        <h5>Last Updated: {{ this.lastUpdated }}</h5>
      <select id="sitePicker" data-live-search="true" class="selectpicker form-control"  data-icon-base="fa"  data-actions-box="true"  >
       <option v-for="coin in allCoins" :value="coin.CoinId" :key="coin.CoinId" >{{coin.CoinName}}</option>
@@ -15,8 +15,9 @@
     <div v-for="(myCoin, index) in myCoins">
       <label>Coin Name: {{ myCoin.coinName }} </label>
       <label>Qty: {{ myCoin.qty }} </label>
-      <label>Value: {{ myCoin.value}} </label>
+      <label>Value: {{ myCoin.value | currency  }} </label>
           <label>CoinId: {{ myCoin.coinId}} </label>
+          <label>Dynamic Value : {{ calculateValue(myCoin.coinId, myCoin.qty) | currency }} </label>
 
       <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span>
     </div>   
@@ -46,8 +47,15 @@ export default {
     totalValue : function () {
 
       return this.myCoins.reduce( function ( a , b , index) { return a + b.value  } , 0 ); 
-    } 
+    }  ,
+    calculateValue : function (coinId, qty) {
+      //return test; 
+         var vm = this;  
+      return function (coinId, qty) {
+          return ( $.grep(vm.allCoins, function(e){ return e.CoinId == coinId; }) )[0].BitcoinPrice  * qty  * vm.bitCoinPrice;
+      }; 
 
+    }
   },
   methods : {
     addCoin : function() {
