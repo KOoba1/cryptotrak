@@ -4,6 +4,7 @@
       <h2>Bitcoin price is: {{ this.bitCoinPrice }}</h2>
        <h3>Your portfolio Value is: {{ this.totalValue | currency  }}</h3>
        <h5>Last Updated: {{ this.lastUpdated }}</h5>
+       <a href="http://www.beafriend.org/">TEST</a>
      <select id="sitePicker" data-live-search="true" class="selectpicker form-control"  data-icon-base="fa"  data-actions-box="true"  >
       <option v-for="coin in allCoins" :value="coin.CoinId" :key="coin.CoinId" >{{coin.CoinName}}</option>
     </select>
