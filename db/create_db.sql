@@ -12,7 +12,7 @@ CREATE TABLE ScrapedData (
 ); */  
 
 CREATE TABLE CoinPrice (
-	  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+	  id INT NOT NULL AUTO_INCREMENT,
   CoinName VARCHAR(200),
   CoinId VARCHAR(200), 
   BitcoinPrice DECIMAL(16,16) ,
@@ -23,7 +23,7 @@ CREATE TABLE CoinPrice (
 
 
 CREATE TABLE BitcoinPrice (
-	  id MEDIUMINT NOT NULL AUTO_INCREMENT,
+	  id INT NOT NULL AUTO_INCREMENT,
   Currency VARCHAR(200), 
   Value DECIMAL(12,2) , 
   Symbol VARCHAR(20), 

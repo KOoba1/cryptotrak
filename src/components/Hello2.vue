@@ -3,28 +3,37 @@
     <h1>Welcome to CryptoTrak</h1>
       <h2>Bitcoin price is: {{ this.bitCoinPrice }}</h2>
        <h3>Your portfolio Value is: {{ this.totalValue | currency  }}</h3>
+       <h4>Your total investment is: {{ this.initialInvestment | currency  }}</h4>
+       <h4>Your total gain/loss is: {{ this.gainLoss | currency  }}</h4>
        <h5>Last Updated: {{ this.lastUpdated }}</h5>
+       <div class="row">
+        <div class="col-md-2 col-md-offset-5">
      <select id="sitePicker" data-live-search="true" class="selectpicker form-control"  data-icon-base="fa"  data-actions-box="true"  >
       <option v-for="coin in allCoins" :value="coin.CoinId" :key="coin.CoinId" >{{coin.CoinName}}</option>
     </select>
+    </div>
+    </div>
     <label>Qty: <input v-model="qty" type="number"></input> </label>
     <br>
     <label>Purchased Price: <input v-model="origValue" type="number"></input></label>
     <button @click="addCoin">Add Coin</button>
+
     <h2>My Coins</h2>
     <div v-for="(myCoin, index) in myCoins">
       <label>Coin Name: {{ myCoin.coinName }} </label>
       <label>Qty: {{ myCoin.qty }} </label>
-      <label>Value: {{ myCoin.value | currency  }} </label>
+      <!-- label>Value: {{ myCoin.value | currency  }} </label-->
           <label>CoinId: {{ myCoin.coinId}} </label>
-          <label>Dynamic Value : {{ calculateValue(myCoin.coinId, myCoin.qty) | currency }} </label>
-
+          <label>Original Value : {{ myCoin.value | currency }} </label>
+          <label>Current Value : {{ calculateValue(myCoin.coinId, myCoin.qty) | currency }} </label>
+          <label>Change in Value: {{ calculateValue(myCoin.coinId, myCoin.qty) - myCoin.value | currency }} </label>
       <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span>
     </div>   
   </div>
 </template>
 
 <script>
+import highcharts from 'Highcharts'
 export default {
   name: 'hello',
   data () {
@@ -45,8 +54,22 @@ export default {
   computed : {
 
     totalValue : function () {
+      var sum = 0 ; 
+      for ( var i = 0 ; i < this.myCoins.length; i++ ) {
+
+        var myCoin = this.myCoins[i]; 
+        console.log(myCoin); 
+        sum += this.calculateValue(myCoin.coinId, myCoin.qty) ;  //myCoin.BitCoinPrice * myCoin.qty * this.bitCoinPrice ; 
+      }
+      return sum ; 
+      //return this.myCoins.reduce( function ( a , b , index) { return a + b.value  } , 0 ); 
+    }  ,
+      initialInvestment : function () {
 
       return this.myCoins.reduce( function ( a , b , index) { return a + b.value  } , 0 ); 
+    }  ,
+       gainLoss : function () {
+        return this.totalValue - this.initialInvestment; 
     }  ,
     calculateValue : function (coinId, qty) {
       //return test; 
@@ -63,7 +86,7 @@ export default {
       var self = this; 
       var value =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinId; }) )[0].BitcoinPrice  * this.qty  * this.bitCoinPrice;
       var coinName  =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinId; }) )[0].CoinName
-      var newCoin = { 'coinName':coinName , 'coinId':this.newCoinId , 'qty': this.qty , 'value':value} ; 
+      var newCoin = { 'coinName':coinName , 'coinId':this.newCoinId , 'qty': this.qty , 'value':this.origValue  } ; 
       this.myCoins.push(newCoin); 
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
 
