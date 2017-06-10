@@ -6,8 +6,10 @@
        <h4>Your total investment is: {{ this.initialInvestment | currency  }}</h4>
        <h4>Your total gain/loss is: {{ this.gainLoss | currency  }}</h4>
        <h5>Last Updated: {{ this.lastUpdated }}</h5>
+
        <div class="row">
         <div class="col-md-2 col-md-offset-5">
+
      <select id="sitePicker" data-live-search="true" class="selectpicker form-control"  data-icon-base="fa"  data-actions-box="true"  >
       <option v-for="coin in allCoins" :value="coin.CoinId" :key="coin.CoinId" >{{coin.CoinName}}</option>
     </select>
