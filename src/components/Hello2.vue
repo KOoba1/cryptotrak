@@ -2,9 +2,9 @@
   <div class="hello">
     <h1>Welcome to CryptoTrak</h1>
       <h2>Bitcoin price is: {{ this.bitCoinPrice }}</h2>
-       <h3>Your portfolio Value is: {{ this.totalValue | currency  }}</h3>
-       <h4>Your total investment is: {{ this.initialInvestment | currency  }}</h4>
-       <h4>Your total gain/loss is: {{ this.gainLoss | currency  }}</h4>
+       <h3 v-if="allCoins.length > 0">Your portfolio Value is: {{ this.totalValue | currency  }}</h3>
+       <h4  v-if="allCoins.length > 0">Your total investment is: {{ this.initialInvestment | currency  }}</h4>
+       <h4  v-if="allCoins.length > 0">Your total gain/loss is: {{ this.gainLoss | currency  }}</h4>
        <h5>Last Updated: {{ this.lastUpdated }}</h5>
 
        <div class="row">
@@ -30,12 +30,30 @@
           <label>Current Value : {{ calculateValue(myCoin.coinId, myCoin.qty) | currency }} </label>
           <label>Change in Value: {{ calculateValue(myCoin.coinId, myCoin.qty) - myCoin.value | currency }} </label>
       <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span>
-    </div>   
+    </div>
+    <br>
+    <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+   
   </div>
 </template>
 
 <script>
-import highcharts from 'Highcharts'
+import Highcharts from 'Highcharts'
+
+Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+    return {
+        radialGradient: {
+            cx: 0.5,
+            cy: 0.3,
+            r: 0.7
+        },
+        stops: [
+            [0, color],
+            [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+        ]
+    };
+});
+
 export default {
   name: 'hello',
   data () {
@@ -68,7 +86,7 @@ export default {
     }  ,
       initialInvestment : function () {
 
-      return this.myCoins.reduce( function ( a , b , index) { return a + b.value  } , 0 ); 
+      return this.myCoins.reduce( function ( a , b , index) { return parseFloat(a) + parseFloat(b.value) } , 0 ); 
     }  ,
        gainLoss : function () {
         return this.totalValue - this.initialInvestment; 
@@ -136,6 +154,51 @@ export default {
         this.myCoins = JSON.parse(coinData); 
       }
 
+    } ,
+
+    createPieChart(){
+
+// Build the chart
+Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Portfolio Breakdown'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+      credits: {
+      enabled: false
+  },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                },
+                connectorColor: 'silver'
+            }
+        }
+    },
+    series: [{
+        name: 'Percent of portfolio: ',
+        data: [
+            { name: 'GNT', y: 56.33 },
+        
+            { name: 'Maid', y: 10.38 },
+            { name: 'SJCX', y: 4.77 }
+        ]
+    }]
+});
     }
 
   },
@@ -145,6 +208,9 @@ export default {
       this.updateBitcoinInterval = setInterval(this.updateBitcoinPrice,60000);
       this.updateAllCoins(); 
       this.updateAllInterval = setInterval(this.updateAllCoins, 60000);
+
+      this.createPieChart(); 
+   
 
       /*
       var self = this; 
