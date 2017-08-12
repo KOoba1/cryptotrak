@@ -150,8 +150,10 @@ export default {
     getMyCoins : function() {
 
       var coinData =  window.localStorage.getItem('myCoins') ;
-      if (coinData != null || '' ) {
+      if (coinData != null || coinData != '' ) {
         this.myCoins = JSON.parse(coinData); 
+      } else {
+        console.log('no local storage')
       }
 
     } ,

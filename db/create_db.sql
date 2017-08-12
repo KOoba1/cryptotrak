@@ -11,7 +11,18 @@ CREATE TABLE ScrapedData (
 
 ); */  
 
+
 CREATE TABLE CoinPrice (
+    id INT NOT NULL AUTO_INCREMENT,
+  CoinName VARCHAR(200),
+  CoinId VARCHAR(200), 
+  BitcoinPrice DECIMAL(16,16) ,
+  EntryDate  DATETIME DEFAULT CURRENT_TIMESTAMP, 
+   PRIMARY KEY (id)
+
+);
+
+CREATE TABLE CryptoCoinChartsData (
 	  id INT NOT NULL AUTO_INCREMENT,
   CoinName VARCHAR(200),
   CoinId VARCHAR(200), 
@@ -20,6 +31,16 @@ CREATE TABLE CoinPrice (
    PRIMARY KEY (id)
 
 );
+
+CREATE TABLE PoloniexData (
+    id INT NOT NULL AUTO_INCREMENT,
+  CoinId VARCHAR(200),
+  BitcoinPrice DECIMAL(16,16) ,
+  EntryDate  DATETIME DEFAULT CURRENT_TIMESTAMP, 
+   PRIMARY KEY (id)
+
+);
+
 
 
 CREATE TABLE BitcoinPrice (

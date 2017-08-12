@@ -22,7 +22,7 @@ $responseArray = json_decode($resp, true);
 //print_r($responseArray['BTC_BCN']) ;
 //$storeArray = $responseArray['d']['Results']; 
 $i = 0 ; 
-$sql = "INSERT INTO CoinPrice ( CoinName, CoinId , BitcoinPrice )  VALUES  " ; 
+$sql = "INSERT INTO CryptoCoinChartsData ( CoinName, CoinId , BitcoinPrice )  VALUES  " ; 
 foreach ($responseArray as $coin) {
 
 	$name = mysqli_real_escape_string( $conn, $coin['name'] )  ; 
