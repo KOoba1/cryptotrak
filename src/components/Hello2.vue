@@ -27,13 +27,13 @@
     <div v-for="(myCoin, index) in myCoins">
       <label>Coin Name: {{ myCoin.coinName }} </label>
       <label>Qty: {{ myCoin.qty }} </label>
-      <!-- label>Value: {{ myCoin.value | currency  }} </label-->
+      <!-- label>Value: {{ myCoin.value | currency  }} </label>
           <label>CoinId: {{ myCoin.coinId}} </label>
           <label>Original Value : {{ myCoin.value | currency }} </label>
           <label>Current Value : {{ calculateValue(myCoin.coinId, myCoin.qty) | currency }} </label>
           <label>Change in Value: {{ calculateValue(myCoin.coinId, myCoin.qty) - myCoin.value | currency }} </label>
           <br>
-            <label>Notes: {{ myCoin.notes }} </label>
+            <label>Notes: {{ myCoin.notes }} </label -->
       <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span>
     </div>
     <br>
@@ -121,7 +121,7 @@ export default {
     } , 
     updateBitcoinPrice : function () { 
 
-        this.$http.get('https://koobasoft.com/cryptoscrape/LatestBitcoinPrice.php').then(response => {
+        this.$http.get('http://localhost/cryptotrak/db/LatestBitcoinPrice.php').then(response => {
           this.bitCoinPrice = response.body[0].Value; 
         
         }, response => {
@@ -138,7 +138,7 @@ export default {
     updateAllCoins : function() {
 
 
-    this.$http.get('https://koobasoft.com/cryptoscrape/LatestCoinData.php').then(response => {
+    this.$http.get('http://localhost/cryptotrak/db/LatestCoinData.php').then(response => {
       this.lastUpdated = response.body[0].EntryDate; 
      this.allCoins = response.body ; 
       console.log(response.body); 
