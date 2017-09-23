@@ -6,6 +6,13 @@ import router from './router'
 
 import VueResource from 'vue-resource';
 import Vue2Filters from 'vue2-filters'
+
+import VueFire from 'vuefire'
+
+
+// explicit installation required in module environments
+Vue.use(VueFire)
+
  
 Vue.use(Vue2Filters) ;
 Vue.use(VueResource);
