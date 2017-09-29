@@ -2,37 +2,38 @@
 
  <div class="container-fluid" id="wrapper">
     <div class="content animate-panel">
-
+    <div v-if="firebaseDataLoaded" >{{ allCoins['1337']['USD'] }}</div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="hpanel">
                     <div class="panel-heading">
                         <div class="panel-tools">
                             <a class="showhide"><i class="fa fa-chevron-up"></i></a>
-                            
+
                         </div>
                         Add Coins
                     </div>
-                    
+
                     <div class="panel-body">
 
                         <div class="row">
 
                             <div class="col-sm-2">
                                <h5> Select a coin </h5>
-                               <select id="coinSelect" class="coinSelect" style="width: 100%">
+                               <v-select v-model="selectedCoin" placeholder="Select a coin" :options="Object.keys(allCoins)"></v-select>
+                               <!-- select id="coinSelect" class="coinSelect" style="width: 100%">
                                 <option></option>
                                 <option value="MAID">MAID</option>
                                 <option value="GNT">GNT</option>
                                 <option value="ETH">ETH</option>
                                 <option value="BAT">BAT</option>
-                            </select>
+                            </select !-->
                         </div>
 
                         <div class="col-sm-2">
                           <h5>Qty</h5>
-                          <input id="qty" type="text"  name="qty" value="0">
-                      </div>   
+                          <input id="qty" type="text"  name="qty" >
+                      </div>
 
 
                       <div class="col-sm-2">
@@ -41,20 +42,19 @@
                      </div>
                      <div class="col-sm-4">
                          <h5>Notes (Optional)</h5>
-                         <input type="text" placeholder="Some note" class="form-control">
+                         <input type="text" v-model="newNote" placeholder="Some note" class="form-control">
                      </div>
                        <div class="col-sm-2">
                        <h5> Add</h5>
                        <button @click="addCoin" class="btn btn-success">Add Coin</button>
                    </div>
                  </div>
-        
-          
-       </div> <!-- end of add coin panel body --> 
+
+
+       </div> <!-- end of add coin panel body -->
    </div>
 </div>
 </div>
-
 
 <div class="row">
    <div class="col-lg-12">
@@ -67,12 +67,14 @@
         </div>
         <div class="panel-body list">
             <div class="table-responsive project-list">
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
 
-                            <th colspan="3">Coin</th>
-                            <th>Qty</th>
+                            <th colspan="2">Coin</th>
+                            <th>Symbol</th>
+                            <th @click="sortByQty" >Qty</th>
                             <th>Share</th>
                             <th>Value</th>
                             <th>Gain/Loss</th>
@@ -81,9 +83,14 @@
                     </thead>
                     <tbody>
                         <tr v-for="(myCoin, index) in myCoins">
-                            <td><i class="fa fa-clock-o"></i> </td>
+                            <td><img src="https://www.cryptocompare.com/media/20646/eth.png" height="20px" width="20px"></img></td>
                             <td>{{ myCoin.name }}</td>
-                            <td></td>
+                            <td>{{ myCoin.id }}</td>
+                            <td>{{ myCoin.qty }}</td>
+                            <td>100%</td>
+                             <td>{{ myCoin.value }}</td>
+                              <td>+$10</td>
+                               <td>4%</td>
                         </tr>
                         <tr>
                             <td><input type="checkbox" class="i-checks" checked></td>
@@ -166,40 +173,82 @@
 
 </template>
 <script>
+import vSelect from "vue-select"
 
+ import firebaseConnect from '@/firebaseConnect.js'
 export default {
 
+   components: {vSelect},
      name: 'hello',
+      firebase: {
+
+    firebaseCoins: {
+
+      source: firebaseConnect.FBApp.ref('allCoins'),
+      // optionally bind as an object
+      asObject: true
+
+    }
+  } ,
      data () {
         return {
-            coinName:"", 
-         myCoins:[ { "name":"test" }]
+           firebaseDataLoaded:false,
+            selectedCoin:"",
+            newNote:"",
+            someValue:" old value" ,
+            allCoins:{},
+            coins:[{label:'Maidsafe', value:'MAID'}],
+         myCoins:[ ]
      }
  } ,
  methods : {
     addCoin: function() {
+      console.log(this.allCoins);
+      var coinValue = -4;
+      //this.$firebaseRefs.allCoins.child('SUB').once('value').then (  function (snapshot)  {
+      /*  this.$firebaseRefs.allCoins.once('value').then (  function (snapshot)  {
 
-      this.coinName = $('#coinSelect').val(); 
-      alert(this.coinName); 
-     var newCoin = { "name":this.coinName} ; 
-      //var self = this; 
-      //var value =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinId; }) )[0].BitcoinPrice  * this.qty  * this.bitCoinPrice;
+          coinValue  = JSON.parse( snapshot.val() ) ;
+          console.log(coinValue['AMS']['USD'] );
+      }); */
 
-     // var coinName  =  ( $.grep(this.allCoins, function(e){ return e.CoinId == self.newCoinId; }) )[0].CoinName ;
-      
-      //var newCoin = { 'coinName':coinName , 'coinId':this.newCoinId , 'qty': this.qty , 'value':this.origValue , 'notes': this.notes} ; 
-      this.myCoins.push(newCoin); 
-      //window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
+      var rawQty = $('#qty').val() ;
+
+      var purhcasedPrice = $('#purchasedPrice').val();
+     var newCoin = { "name":this.selectedCoin , "id":this.selectedCoin.value, "qty":rawQty , "purchased":purchasedPrice,  "note":this.newNote , "value":coinValue } ;
+
+      this.myCoins.push(newCoin);
+      window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
+      this.selectedCoin = "";
+    },
+    sortByQty : function() {
+      //alert('test');
+      //this.myCoins.sort();
+
     }
 
  } ,
- mounted () {
+ created() {
+  var self = this;
+    this.$firebaseRefs.firebaseCoins.once('value').then (  function (snapshot)  {
 
+          self.allCoins  = JSON.parse( snapshot.val() ) ;
+          self.firebaseDataLoaded = true;
+          //console.log(coinValue['AMS']['USD'] );
+      });
+  //this.someValue = "new value" ;
+  //alert(this.someValue); // one possiblity is to load all data  into memory on page load and store it in a local object then use that local object to get all coin info
+  // example :    MAID : { "name":"Maid safe" , ID:"MAID" , Price:23, Image Location: " etc" } , GNT : { "name":"Maid safe" , ID:"MAID" , Price:23, Image Location: " etc" }
+ } ,
+
+ mounted () {
+  console.log(this.allCoins);
    $("#qty").TouchSpin({
     min: 0,
     max: 1000000,
     step: 1,
-    decimals: 6,
+    forcestepdivisibility:'none',
+    decimals: 0,
     boostat: 5,
     maxboostedstep: 10,
 });
@@ -210,6 +259,7 @@ export default {
     prefix: '$',
     min: 0 ,
     max: 100000000,
+    forcestepdivisibility:'none',
     step:1,
     decimals:2,
     boostat:5,
@@ -223,21 +273,21 @@ export default {
 }
 
 
-/* 
+/*
   import firebaseConnect from '@/firebaseConnect.js'
 
 firebase() {
 
-        return { 
+        return {
 
           allCoins: {
           source: firebaseConnect.FBApp.ref('allCoins'),
-    
+
              asObject: true,
-   
+
              readyCallback: function () {}
           }
-        } 
+        }
     }
     */
 </script>

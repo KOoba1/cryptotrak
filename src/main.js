@@ -8,12 +8,13 @@ import VueResource from 'vue-resource';
 import Vue2Filters from 'vue2-filters'
 
 import VueFire from 'vuefire'
+import Firebase from 'firebase'
 
 
 // explicit installation required in module environments
 Vue.use(VueFire)
 
- 
+
 Vue.use(Vue2Filters) ;
 Vue.use(VueResource);
 Vue.config.productionTip = false
