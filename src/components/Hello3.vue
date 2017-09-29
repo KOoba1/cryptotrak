@@ -32,7 +32,7 @@
 
                         <div class="col-sm-2">
                           <h5>Qty</h5>
-                          <input id="qty" type="text"  name="qty" >
+                          <input id="qty" type="text"  name="qty" value="1">
                       </div>
 
 
@@ -67,12 +67,12 @@
         </div>
         <div class="panel-body list">
             <div class="table-responsive project-list">
-
-                <table class="table table-striped">
+                <p v-if="myCoins.length == 0 ">Please enter some coins</p>
+                <table v-else class="table table-striped">
                     <thead>
                         <tr>
-
-                            <th colspan="2">Coin</th>
+                            <th>Icon</th>
+                            <th>Name</th>
                             <th>Symbol</th>
                             <th @click="sortByQty" >Qty</th>
                             <th>Share</th>
@@ -83,7 +83,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(myCoin, index) in myCoins">
-                            <td><img src="https://www.cryptocompare.com/media/20646/eth.png" height="20px" width="20px"></img></td>
+                            <td><img :src="myCoin.img"  height="25px" width="25px"></img></td>
                             <td>{{ myCoin.name }}</td>
                             <td>{{ myCoin.id }}</td>
                             <td>{{ myCoin.qty }}</td>
@@ -92,58 +92,7 @@
                               <td>+$10</td>
                                <td>4%</td>
                         </tr>
-                        <tr>
-                            <td><input type="checkbox" class="i-checks" checked></td>
-                            <td>Contract with Zender Company
-                                <br/>
-                                <small><i class="fa fa-clock-o"></i> Created 14.08.2015</small>
-                            </td>
-                            <td>
-                                <span class="pie">1/5</span>
-                            </td>
-                            <td><strong>20%</strong></td>
-                            <td>Jul 14, 2013</td>
-                            <td><a href=""><i class="fa fa-check text-success"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="i-checks"></td>
-                            <td>There are many variations of passages
-                                <br/>
-                                <small><i class="fa fa-clock-o"></i> Created 21.07.2015</small>
-                            </td>
-                            <td>
-                                <span class="pie">1/4</span>
-                            </td>
-                            <td><strong>40%</strong></td>
-                            <td>Jul 16, 2013</td>
-                            <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="i-checks" checked></td>
-                            <td>Contrary to popular belief
-                                <br/>
-                                <small><i class="fa fa-clock-o"></i> Created 12.06.2015</small>
-                            </td>
-                            <td>
-                                <span class="pie">0.52/1.561</span>
-                            </td>
-                            <td><strong>75%</strong></td>
-                            <td>Jul 18, 2013</td>
-                            <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="i-checks"></td>
-                            <td>Gamma project
-                                <br/>
-                                <small><i class="fa fa-clock-o"></i> Created 06.03.2015</small>
-                            </td>
-                            <td>
-                                <span class="pie">226/360</span>
-                            </td>
-                            <td><strong>16%</strong></td>
-                            <td>Jul 22, 2013</td>
-                            <td><a href=""><i class="fa fa-check text-navy"></i></a></td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -215,7 +164,15 @@ export default {
       var rawQty = $('#qty').val() ;
 
       var purhcasedPrice = $('#purchasedPrice').val();
-     var newCoin = { "name":this.selectedCoin , "id":this.selectedCoin.value, "qty":rawQty , "purchased":purchasedPrice,  "note":this.newNote , "value":coinValue } ;
+      var id = this.selectedCoin;
+      var thisCoin = this.allCoins[id];
+      console.log(id);
+      console.log(thisCoin);
+      var imgSrc = 'https://www.cryptocompare.com' + thisCoin.image;
+      var coinValue = thisCoin.USD * rawQty;
+      console.log(imgSrc);
+
+     var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty , "purchased":purchasedPrice,  "note":this.newNote , "value":coinValue , "img": imgSrc } ;
 
       this.myCoins.push(newCoin);
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
