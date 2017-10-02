@@ -2,7 +2,8 @@
 
  <div class="container-fluid" id="wrapper">
     <div class="content animate-panel">
-    <div v-if="firebaseDataLoaded" >{{ allCoins['1337']['USD'] }}</div>
+    <!-- div v-if="firebaseDataLoaded" >{{ allCoins['1337']['USD'] }}</div-->
+      <!-- {{ lastUpdate['.value'] }} -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="hpanel">
@@ -67,7 +68,7 @@
         </div>
         <div class="panel-body list">
             <div class="table-responsive project-list">
-                <p v-if="myCoins.length == 0 ">Please enter some coins</p>
+                <p v-if="myCoins.length == 0 ">Please add a coin above</p>
                 <table v-else class="table table-striped">
                     <thead>
                         <tr>
@@ -79,6 +80,7 @@
                             <th>Value</th>
                             <th>Gain/Loss</th>
                             <th>Gain/Loss %</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,8 +91,9 @@
                             <td>{{ myCoin.qty }}</td>
                             <td>100%</td>
                              <td>{{ myCoin.value }}</td>
-                              <td>+$10</td>
+                              <td>{{ myCoin.value - myCoin.purchased }} </td>
                                <td>4%</td>
+                               <td> <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span> </td>
                         </tr>
 
                     </tbody>
@@ -130,7 +133,10 @@ export default {
    components: {vSelect},
      name: 'hello',
       firebase: {
-
+    lastUpdate: {
+      source: firebaseConnect.FBApp.ref('lastUpdate'),
+      asObject:true
+    },
     firebaseCoins: {
 
       source: firebaseConnect.FBApp.ref('allCoins'),
@@ -166,13 +172,12 @@ export default {
       var purhcasedPrice = $('#purchasedPrice').val();
       var id = this.selectedCoin;
       var thisCoin = this.allCoins[id];
-      console.log(id);
-      console.log(thisCoin);
+
       var imgSrc = 'https://www.cryptocompare.com' + thisCoin.image;
       var coinValue = thisCoin.USD * rawQty;
-      console.log(imgSrc);
 
-     var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty , "purchased":purchasedPrice,  "note":this.newNote , "value":coinValue , "img": imgSrc } ;
+
+     var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty , "purchased":purhcasedPrice,  "note":this.newNote , "value":coinValue , "img": imgSrc } ;
 
       this.myCoins.push(newCoin);
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
@@ -181,6 +186,21 @@ export default {
     sortByQty : function() {
       //alert('test');
       //this.myCoins.sort();
+
+    } ,
+      removeCoin : function(index) {
+
+      this.myCoins.splice( index, 1 );
+      window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
+    },
+     getMyCoins : function() {
+
+      var coinData =  window.localStorage.getItem('myCoins') ;
+      if (coinData != null || coinData != '' ) {
+        this.myCoins = JSON.parse(coinData);
+      } else {
+        console.log('no local storage')
+      }
 
     }
 
@@ -199,6 +219,7 @@ export default {
  } ,
 
  mounted () {
+  this.getMyCoins();
   console.log(this.allCoins);
    $("#qty").TouchSpin({
     min: 0,
@@ -230,21 +251,4 @@ export default {
 }
 
 
-/*
-  import firebaseConnect from '@/firebaseConnect.js'
-
-firebase() {
-
-        return {
-
-          allCoins: {
-          source: firebaseConnect.FBApp.ref('allCoins'),
-
-             asObject: true,
-
-             readyCallback: function () {}
-          }
-        }
-    }
-    */
 </script>
