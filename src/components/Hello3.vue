@@ -114,6 +114,7 @@
             My Portfolio
         </div>
         <div class="panel-body list">
+            <p>Total portfoilio value: {{ totalValue  }} </p>
             <p>Highchart showing portfolio share goes here </p>
         </div>
     </div>
@@ -145,6 +146,21 @@ export default {
 
     }
   } ,
+  computed : {
+    totalValue : function ( ) {
+      var totalVal = 0; 
+      var self = this; 
+      this.myCoins.forEach(function(coin) {
+       var thisVal = coin.qty * self.allCoins[coin.id][USD] ;
+       totalVal += thisVal ;
+      });
+
+
+      return totalVal ; 
+    }
+
+  } ,
+
      data () {
         return {
            firebaseDataLoaded:false,
@@ -199,7 +215,7 @@ export default {
       if (coinData != null || coinData != '' ) {
         this.myCoins = JSON.parse(coinData);
       } else {
-        console.log('no local storage')
+        console.log('no local storage');
       }
 
     }
