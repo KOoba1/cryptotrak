@@ -19,7 +19,7 @@
                         <div class="row">
 
                             <div class="col-sm-2">
-                               <h5> Select a coin </h5>
+                               <h5> Select a coin  <i class="fa fa-question" aria-hidden="true"></i></h5>
                                <v-select v-model="selectedCoin" placeholder="Select a coin" :options="Object.keys(allCoins)"></v-select>
                                <!-- select id="coinSelect" class="coinSelect" style="width: 100%">
                                 <option></option>
@@ -31,17 +31,17 @@
                         </div>
 
                         <div class="col-sm-2">
-                          <h5>Qty</h5>
+                          <h5>Qty  <i class="fa fa-question" aria-hidden="true"></i></h5>
                           <input id="qty" type="text"  name="qty" value="1">
                       </div>
 
 
                       <div class="col-sm-2">
-                         <h5>Purchased Price (Optional) </h5>
+                         <h5>Purchased Price (Optional)  <i class="fa fa-question" aria-hidden="true"></i></h5>
                          <input id="purchasedPrice" type="text"  name="purchasedPrice" value="">
                      </div>
                      <div class="col-sm-4">
-                         <h5>Notes (Optional)</h5>
+                         <h5>Notes (Optional)  <i class="fa fa-question" aria-hidden="true"></i></h5>
                          <input type="text" v-model="newNote" placeholder="Some note" class="form-control">
                      </div>
                        <div class="col-sm-2">
