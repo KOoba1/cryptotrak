@@ -84,7 +84,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(myCoin, index) in myCoins">
+                        <!--tr v-for="(myCoin, index) in myCoins">
                             <td><img :src="myCoin.img"  height="25px" width="25px"></img></td>
                             <td>{{ myCoin.name }}</td>
                             <td>{{ myCoin.id }}</td>
@@ -94,8 +94,10 @@
                               <td>{{ myCoin.value - myCoin.purchased }} </td>
                                <td>4%</td>
                                <td> <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span> </td>
-                        </tr>
-
+                        </tr-->
+                        <Coin v-for="(myCoin,index) in myCoins" :coin="myCoin" :totalPortfolioValue="totalPortfolioValue" :singleCoinValue="getCoinValue(myCoin.id)" :key="index"
+                        v-on:deleteCoin="removeCoin(index)">
+                        ></Coin>
                     </tbody>
                 </table>
             </div>
@@ -114,7 +116,7 @@
             My Portfolio
         </div>
         <div class="panel-body list">
-            <p>Total portfoilio value: {{ totalValue  }} </p>
+            <p>Total portfoilio value: {{ totalPortfolioValue  }} </p>
             <p>Highchart showing portfolio share goes here </p>
         </div>
     </div>
@@ -127,11 +129,11 @@
 </template>
 <script>
 import vSelect from "vue-select"
-
+import Coin from '@/components/Coin.vue'
  import firebaseConnect from '@/firebaseConnect.js'
 export default {
 
-   components: {vSelect},
+   components: {vSelect, Coin},
      name: 'hello',
       firebase: {
     lastUpdate: {
@@ -147,14 +149,15 @@ export default {
     }
   } ,
   computed : {
-    totalValue : function ( ) {
+    totalPortfolioValue : function ( ) {
+      if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {  
+           return 0 ;       } //make sure data is ready 
       var totalVal = 0; 
       var self = this; 
       this.myCoins.forEach(function(coin) {
-       var thisVal = coin.qty * self.allCoins[coin.id][USD] ;
+       var thisVal = coin.qty * self.allCoins[coin.id]['USD'] ;
        totalVal += thisVal ;
       });
-
 
       return totalVal ; 
     }
@@ -173,6 +176,12 @@ export default {
      }
  } ,
  methods : {
+    getCoinValue : function(coinId) {
+       if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {  
+           return 0 ;       } //make sure data is ready 
+      return this.allCoins[coinId]['USD']; 
+
+    },
     addCoin: function() {
       console.log(this.allCoins);
       var coinValue = -4;
