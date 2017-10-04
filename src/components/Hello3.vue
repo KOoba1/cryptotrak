@@ -21,7 +21,8 @@
 
                             <div class="col-sm-2">
                                <h5> Select a coin  <i class="fa fa-question" aria-hidden="true"></i></h5>
-                               <v-select v-model="selectedCoin" placeholder="Select a coin" :options="Object.keys(allCoins)"></v-select>
+                               <!-- v-select v-model="selectedCoin" placeholder="Select a coin" :options="Object.keys(allCoins)"></v-select-->
+                               <v-select v-model="selectedCoin" placeholder="Select a coin" :options="selectCoinList"></v-select>
                                <!-- select id="coinSelect" class="coinSelect" style="width: 100%">
                                 <option></option>
                                 <option value="MAID">MAID</option>
@@ -76,7 +77,9 @@
                             <th>Name</th>
                             <th>Symbol</th>
                             <th @click="sortByQty" >Qty</th>
+                            <th>Cost Basis</th>
                             <th>Share</th>
+                            <th>Purchased Price</th>
                             <th>Value</th>
                             <th>Gain/Loss</th>
                             <th>Gain/Loss %</th>
@@ -117,7 +120,7 @@
         </div>
         <div class="panel-body list">
             <p>Total portfoilio value: {{ totalPortfolioValue  }} </p>
-            <p>Highchart showing portfolio share goes here </p>
+            <PortfolioChart :myCoins="myCoins" ></PortfolioChart>
         </div>
     </div>
 </div>
@@ -130,10 +133,11 @@
 <script>
 import vSelect from "vue-select"
 import Coin from '@/components/Coin.vue'
+import PortfolioChart from '@/components/PortfolioChart'
  import firebaseConnect from '@/firebaseConnect.js'
 export default {
 
-   components: {vSelect, Coin},
+   components: {vSelect, Coin, PortfolioChart},
      name: 'hello',
       firebase: {
     lastUpdate: {
@@ -149,6 +153,16 @@ export default {
     }
   } ,
   computed : {
+    selectCoinList : function() {
+      var retVal = []; 
+      var self = this; 
+      Object.keys(this.allCoins).forEach(function(key,index) {
+      var label =  self.allCoins[key].fullName + " (" +  key + ")";  
+      retVal.push({"label":label , "value":key } ); 
+    });
+
+      return retVal ; 
+    } ,
     totalPortfolioValue : function ( ) {
       if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {  
            return 0 ;       } //make sure data is ready 
@@ -171,7 +185,7 @@ export default {
             newNote:"",
             someValue:" old value" ,
             allCoins:{},
-            coins:[{label:'Maidsafe', value:'MAID'}],
+            //coins:[{label:'Maidsafe', value:'MAID'}],
          myCoins:[ ]
      }
  } ,
@@ -183,7 +197,7 @@ export default {
 
     },
     addCoin: function() {
-      console.log(this.allCoins);
+      
       var coinValue = -4;
       //this.$firebaseRefs.allCoins.child('SUB').once('value').then (  function (snapshot)  {
       /*  this.$firebaseRefs.allCoins.once('value').then (  function (snapshot)  {
@@ -195,14 +209,17 @@ export default {
       var rawQty = $('#qty').val() ;
 
       var purhcasedPrice = $('#purchasedPrice').val();
-      var id = this.selectedCoin;
+      //  var id = this.selectedCoin;
+      var id = this.selectedCoin.value;
+  
       var thisCoin = this.allCoins[id];
 
       var imgSrc = 'https://www.cryptocompare.com' + thisCoin.image;
       var coinValue = thisCoin.USD * rawQty;
 
-
-     var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty , "purchased":purhcasedPrice,  "note":this.newNote , "value":coinValue , "img": imgSrc } ;
+      /*   the "value" property is only used for the chart , this should likely be refactored to be updated anytime the coin value is updated (loop through all coins and update their values instead of passing the singleCoinValue to the coin in the for loop" */
+     var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty , 
+     "value":coinValue,  "purchased":purhcasedPrice,  "note":this.newNote ,  "img": imgSrc } ;
 
       this.myCoins.push(newCoin);
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));

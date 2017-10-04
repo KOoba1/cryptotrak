@@ -4,11 +4,13 @@
                             <td> {{ coin.name }} </td>
                             <td> {{ coin.id }}  </td>
                             <td> {{ coin.qty }} </td>
+                            <td> ${{ costBasis }} </td>
                             <td> {{ coinShare }}%</td>
+                            <td> ${{ coin.purchased }} </td>
                             <td> ${{ totalValue.toFixed(2) }}</td>
                             <td :class="{ isPositive : gainLossPositive, isNegative:!gainLossPositive }"> {{ gainLoss }}</td>
                             <td :class="{ isPositive : gainLossPositive , isNegative:!gainLossPositive }"> {{gainLossPercent}}%</td>
-                            <td><span @click="$emit('deleteCoin')" class='glyphicon glyphicon-remove'></span></td>
+                            <td><span @click="$emit('deleteCoin')" class='deleteCoin glyphicon glyphicon-remove'></span></td>
                         </tr>
 
 </template>
@@ -41,6 +43,13 @@ export default {
     } else {
     return (((this.totalValue - this.coin.purchased) / this.coin.purchased ) * 100).toFixed(2); 
   }
+  },
+  costBasis : function ()  {
+       if (this.coin.purchased == 0 ) { 
+        return "N/A" ;
+       } else {
+        return (this.coin.purchased / this.coin.qty).toFixed(2) ; 
+      }
   }
 
  }
@@ -54,4 +63,5 @@ export default {
 .isNegative{
   color:red;
 }
+.deleteCoin { cursor: pointer; cursor: hand; }
 </style>
