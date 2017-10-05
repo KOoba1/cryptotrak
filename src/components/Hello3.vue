@@ -69,7 +69,7 @@
         </div>
         <div class="panel-body list">
             <div class="table-responsive project-list">
-                <p v-if="myCoins.length == 0 ">Please add a coin above</p>
+                <p v-if=" myCoins.length == 0  ">Please add a coin above</p>
                 <table v-else class="table table-striped">
                     <thead>
                         <tr>
@@ -119,8 +119,11 @@
             My Portfolio
         </div>
         <div class="panel-body list">
+            <div v-show="myCoins.length == 0 ">Please add a coin</div>
+            <div v-show="myCoins.length != 0 ">
             <p>Total portfoilio value: {{ totalPortfolioValue  }} </p>
             <PortfolioChart :myCoins="myCoins" ></PortfolioChart>
+            </div>
         </div>
     </div>
 </div>
@@ -134,6 +137,7 @@
 import vSelect from "vue-select"
 import Coin from '@/components/Coin.vue'
 import PortfolioChart from '@/components/PortfolioChart'
+
  import firebaseConnect from '@/firebaseConnect.js'
 export default {
 
@@ -154,26 +158,26 @@ export default {
   } ,
   computed : {
     selectCoinList : function() {
-      var retVal = []; 
-      var self = this; 
+      var retVal = [];
+      var self = this;
       Object.keys(this.allCoins).forEach(function(key,index) {
-      var label =  self.allCoins[key].fullName + " (" +  key + ")";  
-      retVal.push({"label":label , "value":key } ); 
+      var label =  self.allCoins[key].fullName + " (" +  key + ")";
+      retVal.push({"label":label , "value":key } );
     });
 
-      return retVal ; 
+      return retVal ;
     } ,
     totalPortfolioValue : function ( ) {
-      if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {  
-           return 0 ;       } //make sure data is ready 
-      var totalVal = 0; 
-      var self = this; 
+      if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {
+           return 0 ;       } //make sure data is ready
+      var totalVal = 0;
+      var self = this;
       this.myCoins.forEach(function(coin) {
        var thisVal = coin.qty * self.allCoins[coin.id]['USD'] ;
        totalVal += thisVal ;
       });
 
-      return totalVal ; 
+      return totalVal ;
     }
 
   } ,
@@ -185,19 +189,18 @@ export default {
             newNote:"",
             someValue:" old value" ,
             allCoins:{},
-            //coins:[{label:'Maidsafe', value:'MAID'}],
-         myCoins:[ ]
+            myCoins:[ ]
      }
  } ,
  methods : {
     getCoinValue : function(coinId) {
-       if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {  
-           return 0 ;       } //make sure data is ready 
-      return this.allCoins[coinId]['USD']; 
+       if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {
+           return 0 ;       } //make sure data is ready
+      return this.allCoins[coinId]['USD'];
 
     },
     addCoin: function() {
-      
+
       var coinValue = -4;
       //this.$firebaseRefs.allCoins.child('SUB').once('value').then (  function (snapshot)  {
       /*  this.$firebaseRefs.allCoins.once('value').then (  function (snapshot)  {
@@ -211,19 +214,30 @@ export default {
       var purhcasedPrice = $('#purchasedPrice').val();
       //  var id = this.selectedCoin;
       var id = this.selectedCoin.value;
-  
+
       var thisCoin = this.allCoins[id];
 
       var imgSrc = 'https://www.cryptocompare.com' + thisCoin.image;
       var coinValue = thisCoin.USD * rawQty;
 
       /*   the "value" property is only used for the chart , this should likely be refactored to be updated anytime the coin value is updated (loop through all coins and update their values instead of passing the singleCoinValue to the coin in the for loop" */
-     var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty , 
+     var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty ,
      "value":coinValue,  "purchased":purhcasedPrice,  "note":this.newNote ,  "img": imgSrc } ;
 
       this.myCoins.push(newCoin);
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
       this.selectedCoin = "";
+      toastr.options = {
+          "debug": false,
+          "positionClass": "toast-top-center",
+          "onclick": null,
+          "fadeIn": 300,
+          "fadeOut": 1000,
+          "timeOut": 2000,
+          "extendedTimeOut": 1000
+      }
+      toastr.success('Coin Added')
+
     },
     sortByQty : function() {
       //alert('test');
@@ -234,12 +248,24 @@ export default {
 
       this.myCoins.splice( index, 1 );
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
+      toastr.options = {
+          "debug": false,
+          "positionClass": "toast-top-center",
+          "onclick": null,
+          "fadeIn": 300,
+          "fadeOut": 1000,
+          "timeOut": 2000,
+          "extendedTimeOut": 1000
+      }
+      toastr.error('Coin removed')
     },
      getMyCoins : function() {
 
       var coinData =  window.localStorage.getItem('myCoins') ;
-      if (coinData != null || coinData != '' ) {
+      if (coinData != null && coinData != '' ) {
+        //different browsers treat local storage differently, keep this in mind if page doesn't load
         this.myCoins = JSON.parse(coinData);
+
       } else {
         console.log('no local storage');
       }
@@ -261,8 +287,9 @@ export default {
  } ,
 
  mounted () {
+
   this.getMyCoins();
-  console.log(this.allCoins);
+
    $("#qty").TouchSpin({
     min: 0,
     max: 1000000,
@@ -294,3 +321,10 @@ export default {
 
 
 </script>
+
+<style >
+.toast-top-center {
+    top: 80px;
+
+}
+</style>
