@@ -4,12 +4,12 @@
                             <td> {{ coin.name }} </td>
                             <td> {{ coin.id }}  </td>
                             <td> {{ coin.qty }} </td>
-                            <td> ${{ costBasis }} </td>
+                            <td> {{ costBasis | currency }} </td>
                             <td> {{ coinShare }}%</td>
-                            <td> ${{ coin.purchased }} </td>
+                            <td> {{ coin.purchased | currency  }} </td>
                             <td> ${{ totalValue.toFixed(2) }}</td>
-                            <td :class="{ isPositive : gainLossPositive, isNegative:!gainLossPositive }"> {{ gainLoss }}</td>
-                            <td :class="{ isPositive : gainLossPositive , isNegative:!gainLossPositive }"> {{gainLossPercent}}%</td>
+                            <td :class="{ isPositive : gainLossPositive, isNegative:!gainLossPositive }"> {{ gainLoss | currency }}</td>
+                            <td :class="{ isPositive : gainLossPositive , isNegative:!gainLossPositive }"> {{gainLossPercent}}</td>
                             <td><span @click="$emit('deleteCoin')" class='deleteCoin glyphicon glyphicon-remove'></span></td>
                         </tr>
 
@@ -27,7 +27,7 @@ export default {
   },
   gainLoss : function() {
     if (this.coin.purchased == 0 ) {
-      return "N/A" ; 
+      return "" ; 
     } else {
      return ((this.totalValue - this.coin.purchased).toFixed(2)) ; 
     }
@@ -39,9 +39,9 @@ export default {
   }, 
   gainLossPercent : function() {
         if (this.coin.purchased == 0 ) {
-      return "N/A" ; 
+      return "" ; 
     } else {
-    return (((this.totalValue - this.coin.purchased) / this.coin.purchased ) * 100).toFixed(2); 
+    return (((this.totalValue - this.coin.purchased) / this.coin.purchased ) * 100).toFixed(2) + "%" ; 
   }
   },
   costBasis : function ()  {

@@ -30,13 +30,23 @@ export default {
 	},
 	methods : {
 
-		drawChart : function() {
+		updateChart : function() {
 		var myData = [] ; 
 		this.myCoins.forEach( function(coin) {
 			myData.push({ "name":coin.name , "y":coin.value} );
 		}) ; 
-		
- 	this.target = Highcharts.chart(this.$el, {
+		  
+          this.target.series[0].update({
+   
+    data: myData 
+}, false);
+          this.target.redraw(); 
+ 	      
+		}
+
+	},
+	mounted  : function( ) {
+    this.target = Highcharts.chart(this.$el, {
     chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -60,8 +70,8 @@ export default {
         }
     },
     series: [{
-        name: 'Coins', 
-        data : myData 
+        name: 'Portfolio Share', 
+        data : [] 
         /*
         data: [
             { name: 'Water', y: 56.33 },
@@ -70,15 +80,10 @@ export default {
         ] */
     }]
 });
-		}
-
-	},
-	mounted  : function( ) {
-		//this.drawChart();
 	},
 	 watch: {
 	 	myCoins : function() {
-	 		this.drawChart();
+	 		this.updateChart();
 	 	}
 	 },
 	beforeDestroy: function() {

@@ -15,9 +15,30 @@ import Firebase from 'firebase'
 Vue.use(VueFire)
 
 
+
+
+
 Vue.use(Vue2Filters) ;
 Vue.use(VueResource);
 Vue.config.productionTip = false
+
+Vue.filter('dob', function (value) {
+    if (value == null) {
+    	return '' 
+    }
+    else {   
+     var today = new Date();
+    var birthDate = new Date(value);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+		}
+})
+
+
 
 /* eslint-disable no-new */
 new Vue({
