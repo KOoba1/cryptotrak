@@ -6,7 +6,7 @@
       <!-- {{ lastUpdate['.value'] }} -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="hpanel">
+                <div class="hpanel" id="addCoinPanel">
                     <div class="panel-heading">
                         <div class="panel-tools">
                             <a class="showhide"><i class="fa fa-chevron-up"></i></a>
@@ -48,7 +48,7 @@
                      </div>
                        <div class="col-sm-2">
                        <h5> Add</h5>
-                       <button @click="addCoin" class="btn btn-success">Add Coin</button>
+                       <button @click="addCoin"  id="addCoin" class="btn btn-success">Add Coin</button>
                    </div>
                  </div>
 
@@ -187,7 +187,6 @@ export default {
            firebaseDataLoaded:false,
             selectedCoin:"",
             newNote:"",
-            someValue:" old value" ,
             allCoins:{},
             myCoins:[ ]
      }
@@ -225,6 +224,10 @@ export default {
      "value":coinValue,  "purchased":purhcasedPrice,  "note":this.newNote ,  "img": imgSrc } ;
 
       this.myCoins.push(newCoin);
+
+      $('#purchasedPrice').val('');
+      $('#qty').val(1)  ;
+      this.newNote = '' ; 
       window.localStorage.setItem('myCoins', JSON.stringify(this.myCoins));
       this.selectedCoin = "";
       toastr.options = {
@@ -287,6 +290,15 @@ export default {
  } ,
 
  mounted () {
+
+
+    $('body').on('keypress',  function(args) {
+     if (args.keyCode == 13) {
+        $("#addCoin").click();
+           return false;
+        }
+    });
+
 
   this.getMyCoins();
 
