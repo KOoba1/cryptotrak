@@ -5,10 +5,11 @@
                             <td> {{ coin.id }}  </td>
                             <td> {{ coin.qty }} </td>
                             <td> {{ costBasis | currency }} </td>
+                            <td> {{ singleCoinValue | currency }} </td>
                             <td> {{ coinShare }}%</td>
                             <td> {{ coin.purchased | currency  }} </td>
                             <td> ${{ totalValue.toFixed(2) }}</td>
-                            <td :class="{ isPositive : gainLossPositive, isNegative:!gainLossPositive }"> {{ gainLoss | currency }}</td>
+                            <!-- td :class="{ isPositive : gainLossPositive, isNegative:!gainLossPositive }"> {{ gainLoss | currency }}</td-->
                             <td :class="{ isPositive : gainLossPositive , isNegative:!gainLossPositive }"> {{gainLossPercent}}</td>
                             <td><span @click="$emit('deleteCoin')" class='deleteCoin glyphicon glyphicon-remove'></span></td>
                         </tr>

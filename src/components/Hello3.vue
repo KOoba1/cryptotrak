@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="col-sm-2">
-                          <h5>Qty  <i class="fa fa-question" aria-hidden="true"></i></h5>
+                          <h5>Quantity  <i class="fa fa-question" aria-hidden="true"></i></h5>
                           <input id="qty" type="text"  name="qty" value="1">
                       </div>
 
@@ -77,11 +77,12 @@
                             <th>Name</th>
                             <th>Symbol</th>
                             <th @click="sortByQty" >Qty</th>
-                            <th>Cost Basis</th>
+                            <th>Price Paid</th>
+                            <th>Current Price</th>
                             <th>Share</th>
-                            <th>Purchased Price</th>
-                            <th>Value</th>
-                            <th>Gain/Loss</th>
+                            <th>Total Price</th>
+                            <th>Current Value</th>
+                            <!--th>Gain/Loss</th-->
                             <th>Gain/Loss %</th>
                             <th>Delete</th>
                         </tr>
@@ -325,7 +326,8 @@ export default {
     maxboostedstep:10
 });
 
-
+   $('.bootstrap-touchspin-down').each(function (i) { $(this).attr('tabindex', -1); });
+    $('.bootstrap-touchspin-up').each(function (i) { $(this).attr('tabindex', -1); });
 }
 
 
