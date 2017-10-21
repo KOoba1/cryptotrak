@@ -5,7 +5,7 @@
     <!-- div v-if="firebaseDataLoaded" >{{ allCoins['1337']['USD'] }}</div-->
       <!-- {{ lastUpdate['.value'] }} -->
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="hpanel" id="addCoinPanel">
                     <div class="panel-heading">
                         <div class="panel-tools">
@@ -55,8 +55,26 @@
 
        </div> <!-- end of add coin panel body -->
    </div>
-</div>
-</div>
+</div> <!-- end of add coins column -->
+
+<div class="col-lg-6">
+                <div class="hpanel" id="addCoinPanel">
+                    <div class="panel-heading">
+                        <div class="panel-tools">
+                            <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+
+                        </div>
+                        Totals
+                    </div>
+
+                    <div class="panel-body">
+                         <p>Total portfoilio value: {{ totalPortfolioValue  }} </p>
+                    </div>
+                    </div>
+  </div>
+
+
+</div> <!-- end of row -->
 
 <div class="row">
    <div class="col-lg-12">
