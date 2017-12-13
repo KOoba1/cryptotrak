@@ -3,7 +3,7 @@
 	</div>
 </template>
 <script>
-var Highcharts = require('highcharts');
+import Highcharts from 'highcharts'
 
 Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
     return {
@@ -85,7 +85,7 @@ export default {
 	},
 	 watch: {
 	 	myCoins : function() {
-          
+
 	 		this.updateChart();
 	 	}
 	 },
