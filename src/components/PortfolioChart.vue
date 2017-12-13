@@ -31,7 +31,9 @@ export default {
 	methods : {
 
 		updateChart : function() {
+
 		var myData = [] ; 
+
 		this.myCoins.forEach( function(coin) {
 			myData.push({ "name":coin.name , "y":coin.value} );
 		}) ; 
@@ -83,6 +85,7 @@ export default {
 	},
 	 watch: {
 	 	myCoins : function() {
+          
 	 		this.updateChart();
 	 	}
 	 },

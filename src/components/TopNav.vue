@@ -16,12 +16,12 @@
         <div class="small-logo">
             <span class="text-primary">CryptoTrak</span>
         </div>
-        <form role="search" class="navbar-form-custom" method="post" action="#">
+        <!--form role="search" class="navbar-form-custom" method="post" action="#">
             <div class="form-group">
                 <input type="text" placeholder="Search something special" class="form-control" name="search">
             </div>
-        </form>
-        <div class="mobile-menu">
+        </form-->
+        <!--div class="mobile-menu">
             <button type="button" class="navbar-toggle mobile-menu-toggle" data-toggle="collapse" data-target="#mobile-collapse">
                 <i class="fa fa-chevron-down"></i>
             </button>
@@ -35,9 +35,9 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div-->
         <div class="navbar-right">
-            <ul class="nav navbar-nav no-borders">
+            <!--ul class="nav navbar-nav no-borders">
            <li class="dropdown">
                     <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                         <i class="pe-7s-keypad"></i>
@@ -95,14 +95,14 @@
                         <i class="pe-7s-upload pe-rotate-90"></i>
                     </a>
                 </li>
-            </ul>
+            </ul-->
         </div>
     </nav>
 </div>
 
 <aside id="menu">
     <div id="navigation">
-        <div class="profile-picture">
+        <!--div class="profile-picture">
 
             <div class="stats-label text-color">
                 <span class="font-extra-bold font-uppercase">Username</span>
@@ -119,16 +119,26 @@
 
 
             </div>
-        </div>
+        </div-->
 
         <ul class="nav" id="side-menu">
             <li class="active">
-                <a href="#"> <span class="nav-label">Coins</span> <span class="label label-success pull-right">start</span> </a>
+                <a href="#myCoins"> <span class="nav-label">Coins</span> <span class="label label-success pull-right">start</span> </a>
             </li>
             <li>
-                <a href="#"> <span class="nav-label">Portfolio</span> </a>
+                <a href="#portfolio"> <span class="nav-label">Portfolio</span> </a>
             </li>
 
+            <li>
+                <a href="#portfolio"> <span class="nav-label">Export</span> </a>
+            </li>
+
+            <!--li>
+                <a href="#portfolio"> <span class="nav-label">Import</span> </a>
+            </li-->
+            <!--li>
+                <a href="#portfolio"> <span class="nav-label">Account</span> </a>
+            </li-->
         </ul>
     </div>
 </aside>

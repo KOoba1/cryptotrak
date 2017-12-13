@@ -1,15 +1,15 @@
 <template>
 		<tr>
-                            <td><img :src="coin.img"  height="25px" width="25px"></img> </td>
+                            <td><img :src="coinImage"  height="25px" width="25px"></img> </td>
                             <td> {{ coin.name }} </td>
                             <td> {{ coin.id }}  </td>
                             <td> {{ coin.qty }} </td>
-                            <td> {{ costBasis | currency }} </td>
-                            <td> {{ singleCoinValue | currency }} </td>
+                            <td> {{ costBasis | currency('$', 4)  }} </td>
+                            <td> {{ singleCoinValue | currency('$', 4)  }} </td>
                             <td> {{ coinShare }}%</td>
-                            <td> {{ coin.purchased | currency  }} </td>
+                            <td> {{ coin.purchased | currency('$', 2)  }} </td>
                             <td> ${{ totalValue.toFixed(2) }}</td>
-                            <!-- td :class="{ isPositive : gainLossPositive, isNegative:!gainLossPositive }"> {{ gainLoss | currency }}</td-->
+                            <td :class="{ isPositive : gainLossPositive, isNegative:!gainLossPositive }"> {{ gainLoss | currency }}</td>
                             <td :class="{ isPositive : gainLossPositive , isNegative:!gainLossPositive }"> {{gainLossPercent}}</td>
                             <td><span @click="$emit('deleteCoin')" class='deleteCoin glyphicon glyphicon-remove'></span></td>
                         </tr>
@@ -18,7 +18,7 @@
 <script>
 export default {
 
- props: ['totalPortfolioValue','coin', 'myIndex','singleCoinValue'] ,
+ props: ['totalPortfolioValue','coin', 'myIndex','singleCoinValue','coinImage'] ,
  computed : {
   coinShare : function () {
     return  (this.totalValue / this.totalPortfolioValue  * 100 ).toFixed(2); 

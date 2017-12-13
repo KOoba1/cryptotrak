@@ -2,10 +2,8 @@
 
  <div class="container-fluid" id="wrapper">
     <div class="content animate-panel">
-    <!-- div v-if="firebaseDataLoaded" >{{ allCoins['1337']['USD'] }}</div-->
-      <!-- {{ lastUpdate['.value'] }} -->
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="hpanel" id="addCoinPanel">
                     <div class="panel-heading">
                         <div class="panel-tools">
@@ -19,45 +17,45 @@
 
                         <div class="row">
 
-                            <div class="col-sm-2">
+                            <div class="col-sm-4">
                                <h5> Select a coin  <i class="fa fa-question" aria-hidden="true"></i></h5>
-                               <!-- v-select v-model="selectedCoin" placeholder="Select a coin" :options="Object.keys(allCoins)"></v-select-->
+                             
                                <v-select v-model="selectedCoin" placeholder="Select a coin" :options="selectCoinList"></v-select>
-                               <!-- select id="coinSelect" class="coinSelect" style="width: 100%">
-                                <option></option>
-                                <option value="MAID">MAID</option>
-                                <option value="GNT">GNT</option>
-                                <option value="ETH">ETH</option>
-                                <option value="BAT">BAT</option>
-                            </select !-->
+                     
                         </div>
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                           <h5>Quantity  <i class="fa fa-question" aria-hidden="true"></i></h5>
                           <input id="qty" type="text"  name="qty" value="1">
                       </div>
 
 
-                      <div class="col-sm-2">
-                         <h5>Purchased Price (Optional)  <i class="fa fa-question" aria-hidden="true"></i></h5>
+                      <div class="col-sm-3">
+                         <h5>Purchased Price <i class="fa fa-question" aria-hidden="true"></i></h5>
                          <input id="purchasedPrice" type="text"  name="purchasedPrice" value="">
                      </div>
-                     <div class="col-sm-4">
-                         <h5>Notes (Optional)  <i class="fa fa-question" aria-hidden="true"></i></h5>
-                         <input type="text" v-model="newNote" placeholder="Some note" class="form-control">
-                     </div>
+                    
                        <div class="col-sm-2">
                        <h5> Add</h5>
                        <button @click="addCoin"  id="addCoin" class="btn btn-success">Add Coin</button>
                    </div>
+                    </div>
+
+                    <!--div class="row">
+                         <div class="col-sm-12">
+                         <h5>Notes (Optional)  <i class="fa fa-question" aria-hidden="true"></i></h5>
+                         <input type="text" v-model="newNote" placeholder="Some note" class="form-control">
+                     </div>
+                    </div-->
+
                  </div>
 
 
        </div> <!-- end of add coin panel body -->
    </div>
-</div> <!-- end of add coins column -->
 
-<div class="col-lg-6">
+
+<div class="col-lg-4">
                 <div class="hpanel" id="addCoinPanel">
                     <div class="panel-heading">
                         <div class="panel-tools">
@@ -66,17 +64,25 @@
                         </div>
                         Totals
                     </div>
-
+  
                     <div class="panel-body">
-                         <p>Total portfoilio value: {{ totalPortfolioValue  }} </p>
+                        <p v-if=" myCoins.length == 0  "> No Coins in portfolio, please add coins to the left</p>
+                        <div v-else>
+                         <p>Total portfolio value: {{ totalPortfolioValue | currency }} </p>
+                          <p>Total price paid: {{ totalAmountPaid | currency}} </p>
+                          <p> Total gain loss: <span :class="{ isPositive : totalGainLoss > 0  , isNegative:totalGainLoss <= 0  }"  > {{ totalGainLoss | currency }} </span> </p>
+                          <p> Total gain loss percent:
+                            <span :class="{ isPositive : totalGainPercent > 0 , isNegative:totalGainPercent <=0 }"  > {{ totalGainPercent.toFixed(2)  }}% </span> 
+                          </p> 
+                        </div>
                     </div>
                     </div>
   </div>
 
+  </div> <!-- end of row -->
 
-</div> <!-- end of row -->
 
-<div class="row">
+<div class="row" id="myCoins" name="myCoins">
    <div class="col-lg-12">
     <div class="hpanel">
         <div class="panel-heading">
@@ -100,24 +106,20 @@
                             <th>Share</th>
                             <th>Total Price</th>
                             <th>Current Value</th>
-                            <!--th>Gain/Loss</th-->
+                            <th>Gain/Loss</th>
                             <th>Gain/Loss %</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!--tr v-for="(myCoin, index) in myCoins">
-                            <td><img :src="myCoin.img"  height="25px" width="25px"></img></td>
-                            <td>{{ myCoin.name }}</td>
-                            <td>{{ myCoin.id }}</td>
-                            <td>{{ myCoin.qty }}</td>
-                            <td>100%</td>
-                             <td>{{ myCoin.value }}</td>
-                              <td>{{ myCoin.value - myCoin.purchased }} </td>
-                               <td>4%</td>
-                               <td> <span @click='removeCoin(index)' class='glyphicon glyphicon-remove'></span> </td>
-                        </tr-->
-                        <Coin v-for="(myCoin,index) in myCoins" :coin="myCoin" :totalPortfolioValue="totalPortfolioValue" :singleCoinValue="getCoinValue(myCoin.id)" :key="index"
+              
+                        <Coin v-for="(myCoin,index) in myCoins" 
+                        :coin="myCoin" 
+                        :totalPortfolioValue="totalPortfolioValue" 
+                        :singleCoinValue="getCoinValue(myCoin.id)" 
+                        :coinImage="getCoinImage(myCoin.id)"
+                    
+                        :key="index"
                         v-on:deleteCoin="removeCoin(index)">
                         ></Coin>
                     </tbody>
@@ -128,7 +130,7 @@
 </div>
 </div>
 
-<div class="row">
+<div class="row" id="portfolio" name="portfolio">
    <div class="col-lg-12">
     <div class="hpanel">
         <div class="panel-heading">
@@ -140,7 +142,6 @@
         <div class="panel-body list">
             <div v-show="myCoins.length == 0 ">Please add a coin</div>
             <div v-show="myCoins.length != 0 ">
-            <p>Total portfoilio value: {{ totalPortfolioValue  }} </p>
             <PortfolioChart :myCoins="myCoins" ></PortfolioChart>
             </div>
         </div>
@@ -174,7 +175,7 @@ export default {
       asObject: true
 
     }
-  } ,
+  } , 
   computed : {
     selectCoinList : function() {
       var retVal = [];
@@ -186,6 +187,46 @@ export default {
 
       return retVal ;
     } ,
+    totalGainPercent : function() {
+      //sum up the total value for each coin that has a purchased price , subtract  the total paid   divide by total purchased 
+
+      var totalPurchased = 0;
+      var totalValue = 0 ; 
+   
+      var self = this; 
+        this.myCoins.forEach (function (coin) {
+
+          if ( coin.purchased != ""  ) { 
+           
+            totalPurchased += parseFloat(coin.purchased) ;
+            totalValue += self.getCoinValue(coin.id)  * coin.qty ;  
+          } 
+
+          } );
+      var gainLoss = (totalValue - totalPurchased ) ; 
+
+
+         return ( gainLoss  / totalPurchased )  * 100   ; 
+    },
+    totalGainLoss: function() {
+     
+      var totalPurchased = 0;
+      var totalValue = 0 ; 
+   
+      var self = this; 
+        this.myCoins.forEach (function (coin) {
+
+          if ( coin.purchased != ""  ) { 
+           
+            totalPurchased += parseFloat(coin.purchased) ;
+            totalValue += self.getCoinValue(coin.id)  * coin.qty ;  
+          } 
+
+          } );
+        
+         return totalValue - totalPurchased  ; 
+        },
+
     totalPortfolioValue : function ( ) {
       if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {
            return 0 ;       } //make sure data is ready
@@ -197,6 +238,18 @@ export default {
       });
 
       return totalVal ;
+    },
+    totalAmountPaid : function() {
+      var totalAmount =  0 ; 
+      this.myCoins.forEach( function (coin) {
+    
+        if ( coin.purchased == "") {
+
+        } else {
+        totalAmount +=  parseFloat(coin.purchased) ; 
+      }
+        });
+      return   totalAmount; 
     }
 
   } ,
@@ -217,9 +270,18 @@ export default {
       return this.allCoins[coinId]['USD'];
 
     },
+    getCoinImage : function(coinId) {
+       if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {
+           return 0 ;       } //make sure data is ready
+
+   
+      return 'https://www.cryptocompare.com' + this.allCoins[coinId]['image'];
+
+    } ,
+
     addCoin: function() {
 
-      var coinValue = -4;
+      //var coinValue = -4;
       //this.$firebaseRefs.allCoins.child('SUB').once('value').then (  function (snapshot)  {
       /*  this.$firebaseRefs.allCoins.once('value').then (  function (snapshot)  {
 
@@ -235,12 +297,12 @@ export default {
 
       var thisCoin = this.allCoins[id];
 
-      var imgSrc = 'https://www.cryptocompare.com' + thisCoin.image;
-      var coinValue = thisCoin.USD * rawQty;
+      //var coinValue = thisCoin.USD * rawQty;
 
       /*   the "value" property is only used for the chart , this should likely be refactored to be updated anytime the coin value is updated (loop through all coins and update their values instead of passing the singleCoinValue to the coin in the for loop" */
      var newCoin = { "name":thisCoin.fullName ,  "id":id, "qty":rawQty ,
-     "value":coinValue,  "purchased":purhcasedPrice,  "note":this.newNote ,  "img": imgSrc } ;
+     //"value":coinValue,  
+     "purchased":purhcasedPrice,  "note":this.newNote } ;
 
       this.myCoins.push(newCoin);
 
@@ -301,6 +363,7 @@ export default {
 
           self.allCoins  = JSON.parse( snapshot.val() ) ;
           self.firebaseDataLoaded = true;
+          //console.log(self.allCoins['ETH']) ; 
           //console.log(coinValue['AMS']['USD'] );
       });
   //this.someValue = "new value" ;
@@ -310,7 +373,7 @@ export default {
 
  mounted () {
 
-
+    
     $('body').on('keypress',  function(args) {
      if (args.keyCode == 13) {
         $("#addCoin").click();
@@ -358,5 +421,11 @@ export default {
 .toast-top-center {
     top: 80px;
 
+}
+.isPositive{
+  color:green;
+}
+.isNegative{
+  color:red;
 }
 </style>
