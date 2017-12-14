@@ -234,7 +234,7 @@ export default {
       var totalVal = 0;
       var self = this;
       this.myCoins.forEach(function(coin) {
-       var thisVal = coin.qty * self.allCoins[coin.id]['USD'] ;
+       var thisVal = coin.qty *   self.getCoinValue(coin.id); //self.allCoins[coin.id]['USD'] ;
        totalVal += thisVal ;
       });
 
@@ -266,7 +266,10 @@ export default {
  } ,
  methods : {
     getCoinValue : function(coinId) {
+
        if (Object.keys(this.allCoins).length === 0 && this.allCoins.constructor === Object ) {
+          console.log('data not ready') ; 
+          console.log(coinId); 
            return 0 ;       } //make sure data is ready
       return this.allCoins[coinId]['USD'];
 
@@ -353,6 +356,7 @@ export default {
     this.$firebaseRefs.firebaseCoins.once('value').then (  function (snapshot)  {
 
           self.allCoins  = JSON.parse( snapshot.val() ) ;
+          console.log(self.allCoins); 
           self.firebaseDataLoaded = true;
           //console.log(self.allCoins['ETH']) ; 
           //console.log(coinValue['AMS']['USD'] );
